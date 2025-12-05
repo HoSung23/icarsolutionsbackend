@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados */
+:root {
+  --primary: #000034;
+  --secondary: #f97316;
+  --dark: #1f2937;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Animación para el toast */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Formas triangulares con clip-path */
+.triangle-clip {
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.triangle-clip-right {
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.diagonal-gradient {
+  background: linear-gradient(135deg, #000034 0%, #1e40af 50%, var(--secondary) 100%);
+}
