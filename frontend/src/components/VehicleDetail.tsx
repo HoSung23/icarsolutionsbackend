@@ -457,11 +457,23 @@ export default function VehicleDetail({ vehicleId }: VehicleDetailProps) {
 
           {/* Detalles / Desperfectos */}
           <div className="mb-6 bg-amber-50 p-4 rounded-lg border border-amber-200">
-            <div className="flex items-center gap-2 text-amber-900 font-semibold mb-3">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Detalles y Observaciones
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 text-amber-900 font-semibold">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Detalles y Observaciones
+              </div>
+              {/* Logo Visa Cuotas */}
+              <img 
+                src="/Visa_Logo.png" 
+                alt="Visa Cuotas" 
+                className="h-10 w-auto object-contain"
+                onError={(e) => {
+                  // Fallback si no existe la imagen
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
             </div>
             {vehicle.detalles ? (
               <p className="text-gray-700 whitespace-pre-line">{vehicle.detalles}</p>
