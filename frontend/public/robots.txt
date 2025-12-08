@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Sitemap: https://i-carsolutions.com/sitemap.xml
+
+# Bloquear rutas de admin
+Disallow: /admin
+Disallow: /dashboard

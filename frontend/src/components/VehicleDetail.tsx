@@ -468,7 +468,11 @@ export default function VehicleDetail({ vehicleId }: VehicleDetailProps) {
               <img 
                 src="/Visa_Logo.png" 
                 alt="Visa Cuotas" 
-                className="h-10 w-auto object-contain"
+                className="h-12 w-auto object-contain bg-white p-1 rounded"
+                onError={(e) => {
+                  console.error('Error cargando logo Visa');
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             </div>
             {vehicle.detalles ? (
