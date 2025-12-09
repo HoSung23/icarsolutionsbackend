@@ -43,7 +43,14 @@ const UsersManagement: React.FC = () => {
           .order("created_at", { ascending: false });
 
         if (fetchError) throw fetchError;
-        setUsers(data || []);
+
+        // Si es admin, filtrar usuarios superadmin (no puede verlos ni gestionarlos)
+        let filteredUsers = data || [];
+        if (currentUser?.rol === "admin") {
+          filteredUsers = filteredUsers.filter(u => u.rol !== "superadmin");
+        }
+
+        setUsers(filteredUsers);
       } else {
         throw new Error("No tienes permiso para acceder a esta sección");
       }
@@ -141,10 +148,21 @@ const UsersManagement: React.FC = () => {
                       onChange={(e) => handleChangeRole(user.id, e.target.value)}
                       className="px-2 py-1 border border-gray-300 rounded bg-white text-sm capitalize"
                     >
+                      <option value="cliente">Cliente</option>
                       <option value="vendedor">Vendedor</option>
                       <option value="gerente">Gerente</option>
                       <option value="admin">Admin</option>
                       <option value="superadmin">SuperAdmin</option>
+                    </select>
+                  ) : userRole === "admin" ? (
+                    <select
+                      value={user.rol}
+                      onChange={(e) => handleChangeRole(user.id, e.target.value)}
+                      className="px-2 py-1 border border-gray-300 rounded bg-white text-sm capitalize"
+                    >
+                      <option value="cliente">Cliente</option>
+                      <option value="vendedor">Vendedor</option>
+                      <option value="gerente">Gerente</option>
                     </select>
                   ) : (
                     <span className="capitalize font-semibold">{user.rol}</span>
@@ -154,7 +172,7 @@ const UsersManagement: React.FC = () => {
                   {new Date(user.created_at).toLocaleDateString()}
                 </td>
                 <td className="px-4 py-2">
-                  {userRole === "superadmin" && user.rol !== "superadmin" && (
+                  {(userRole === "superadmin" || userRole === "admin") && user.rol !== "superadmin" && (
                     <button
                       onClick={() => handleDeleteUser(user.id)}
                       className="text-red-600 hover:text-red-800 font-semibold text-sm"
