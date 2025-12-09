@@ -33,48 +33,8 @@ import Settings from "../components/Settings";
       <div id="content-area">
         {/* Contenido por defecto - Dashboard principal */}
         <div id="default-view" class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <a href="/vehicles" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer">
-              <div class="text-4xl mb-4">🚗</div>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">Mis Vehículos</h3>
-              <p class="text-gray-600 mb-4">Administra tu inventario de vehículos</p>
-              <button class="text-blue-600 hover:underline font-semibold">Ver Inventario →</button>
-            </a>
-
-            <a href="/quotations" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer">
-              <div class="text-4xl mb-4">📄</div>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">Cotizaciones</h3>
-              <p class="text-gray-600 mb-4">Genera y descarga PDFs de cotizaciones</p>
-              <button class="text-blue-600 hover:underline font-semibold">Ver Cotizaciones →</button>
-            </a>
-
-            <a href="/statistics" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer">
-              <div class="text-4xl mb-4">📊</div>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">Estadísticas</h3>
-              <p class="text-gray-600 mb-4">Visualiza tus ventas y desempeño</p>
-              <button class="text-blue-600 hover:underline font-semibold">Ver Gráficos →</button>
-            </a>
-
-            <a href="/profile" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer">
-              <div class="text-4xl mb-4">👤</div>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">Mi Perfil</h3>
-              <p class="text-gray-600 mb-4">Actualiza tu información personal</p>
-              <button class="text-blue-600 hover:underline font-semibold">Editar Perfil →</button>
-            </a>
-
-            <a href="/users" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer">
-              <div class="text-4xl mb-4">👥</div>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">Usuarios</h3>
-              <p class="text-gray-600 mb-4">Gestiona usuarios del sistema</p>
-              <button class="text-blue-600 hover:underline font-semibold">Ver Usuarios →</button>
-            </a>
-
-            <a href="/settings" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer">
-              <div class="text-4xl mb-4">⚙️</div>
-              <h3 class="text-xl font-bold text-gray-900 mb-2">Configuración</h3>
-              <p class="text-gray-600 mb-4">Ajusta configuración de la cuenta</p>
-              <button class="text-blue-600 hover:underline font-semibold">Configurar →</button>
-            </a>
+          <div id="dashboard-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Las cards se cargarán dinámicamente según el rol */}
           </div>
         </div>
       </div>
@@ -84,6 +44,43 @@ import Settings from "../components/Settings";
 
 <script>
   import { supabase } from "../utils/supabase";
+
+  // Definir permisos por rol
+  const rolePermissions = {
+    cliente: [
+      { icon: "👤", title: "Mi Perfil", description: "Actualiza tu información personal", link: "/profile" },
+      { icon: "⚙️", title: "Configuración", description: "Ajusta configuración de tu cuenta", link: "/settings" }
+    ],
+    vendedor: [
+      { icon: "👤", title: "Mi Perfil", description: "Actualiza tu información personal", link: "/profile" },
+      { icon: "🚗", title: "Vehículos", description: "Administra el inventario de vehículos", link: "/vehicles" },
+      { icon: "⚙️", title: "Configuración", description: "Ajusta configuración de tu cuenta", link: "/settings" }
+    ],
+    admin: [
+      { icon: "🚗", title: "Vehículos", description: "Administra el inventario de vehículos", link: "/vehicles" },
+      { icon: "📄", title: "Cotizaciones", description: "Genera y descarga PDFs de cotizaciones", link: "/quotations" },
+      { icon: "📊", title: "Estadísticas", description: "Visualiza ventas y desempeño", link: "/statistics" },
+      { icon: "👤", title: "Mi Perfil", description: "Actualiza tu información personal", link: "/profile" },
+      { icon: "👥", title: "Usuarios", description: "Gestiona usuarios del sistema", link: "/users" },
+      { icon: "⚙️", title: "Configuración", description: "Ajusta configuración del sistema", link: "/settings" }
+    ],
+    gerente: [
+      { icon: "🚗", title: "Vehículos", description: "Administra el inventario de vehículos", link: "/vehicles" },
+      { icon: "📄", title: "Cotizaciones", description: "Genera y descarga PDFs de cotizaciones", link: "/quotations" },
+      { icon: "📊", title: "Estadísticas", description: "Visualiza ventas y desempeño", link: "/statistics" },
+      { icon: "👤", title: "Mi Perfil", description: "Actualiza tu información personal", link: "/profile" },
+      { icon: "👥", title: "Usuarios", description: "Gestiona usuarios del sistema", link: "/users" },
+      { icon: "⚙️", title: "Configuración", description: "Ajusta configuración del sistema", link: "/settings" }
+    ],
+    superadmin: [
+      { icon: "🚗", title: "Vehículos", description: "Administra el inventario de vehículos", link: "/vehicles" },
+      { icon: "📄", title: "Cotizaciones", description: "Genera y descarga PDFs de cotizaciones", link: "/quotations" },
+      { icon: "📊", title: "Estadísticas", description: "Visualiza ventas y desempeño", link: "/statistics" },
+      { icon: "👤", title: "Mi Perfil", description: "Actualiza tu información personal", link: "/profile" },
+      { icon: "👥", title: "Usuarios", description: "Gestiona usuarios del sistema", link: "/users" },
+      { icon: "⚙️", title: "Configuración", description: "Ajusta configuración del sistema", link: "/settings" }
+    ]
+  };
 
   // Verificar autenticación al cargar la página
   async function checkAuth() {
@@ -114,6 +111,35 @@ import Settings from "../components/Settings";
     
     if (userNameEl) userNameEl.textContent = userData.nombre;
     if (userRoleEl) userRoleEl.textContent = userData.rol;
+
+    // Renderizar dashboard según rol
+    renderDashboard(userData.rol);
+  }
+
+  // Renderizar cards del dashboard según el rol
+  function renderDashboard(role: string) {
+    const dashboardCards = document.getElementById("dashboard-cards");
+    if (!dashboardCards) return;
+
+    // Obtener permisos para el rol (default a cliente si no existe)
+    const permissions = rolePermissions[role] || rolePermissions.cliente;
+
+    // Limpiar contenedor
+    dashboardCards.innerHTML = "";
+
+    // Crear cards
+    permissions.forEach((card) => {
+      const cardEl = document.createElement("a");
+      cardEl.href = card.link;
+      cardEl.className = "bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer";
+      cardEl.innerHTML = `
+        <div class="text-4xl mb-4">${card.icon}</div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">${card.title}</h3>
+        <p class="text-gray-600 mb-4">${card.description}</p>
+        <button class="text-blue-600 hover:underline font-semibold">Acceder →</button>
+      `;
+      dashboardCards.appendChild(cardEl);
+    });
   }
 
   // Logout handler
