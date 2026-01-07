@@ -1,0 +1,61 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import AppointmentsManager from "../../components/AppointmentsManager.tsx";
+---
+
+<Layout title="Gestión de Citas - iCarSolutions">
+  <div id="appointments-container" style="display: none;">
+    <AppointmentsManager client:load />
+  </div>
+  <div id="loading-message" class="flex justify-center items-center min-h-screen">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p class="text-gray-600">Verificando permisos...</p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { supabase } from "../../utils/supabase";
+
+  // Verificar autenticación y rol
+  const checkAuth = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        alert("Debes iniciar sesión para acceder a esta página");
+        window.location.href = "/admin";
+        return;
+      }
+
+      const { data: userData, error } = await supabase
+        .from("users")
+        .select("rol")
+        .eq("id", session.user.id)
+        .single();
+
+      if (error) {
+        console.error("Error al obtener rol:", error);
+        alert("Error al verificar permisos");
+        return;
+      }
+
+      if (!userData || !["admin", "superadmin", "gerente", "vendedor"].includes(userData.rol)) {
+        alert("No tienes permisos para acceder a esta página");
+        window.location.href = "/dashboard";
+        return;
+      }
+
+      // Mostrar contenido
+      document.getElementById("loading-message")!.style.display = "none";
+      document.getElementById("appointments-container")!.style.display = "block";
+    } catch (error) {
+      console.error("Error en checkAuth:", error);
+      alert("Error al verificar autenticación");
+      window.location.href = "/admin";
+    }
+  };
+
+  checkAuth();
+</script>

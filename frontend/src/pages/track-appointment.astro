@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.astro";
+import TrackAppointment from "../components/TrackAppointment.tsx";
+---
+
+<Layout title="Rastrear Cita - iCarSolutions">
+  <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">
+          Rastrear mi Cita
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Ingresa el código de tu cita para ver su estado actual en tiempo real
+        </p>
+      </div>
+
+      <TrackAppointment client:load />
+    </div>
+  </div>
+</Layout>
