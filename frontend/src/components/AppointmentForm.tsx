@@ -35,6 +35,36 @@ export default function AppointmentForm({ onSuccess }: AppointmentFormProps) {
     { value: "otro", label: "Otro Servicio", icon: "📋" },
   ];
 
+  // Cargar información del usuario autenticado
+  React.useEffect(() => {
+    const loadUserInfo = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          const { data: userData, error } = await supabase
+            .from("users")
+            .select("nombre, email, telefono")
+            .eq("id", user.id)
+            .single();
+
+          if (!error && userData) {
+            setFormData(prev => ({
+              ...prev,
+              cliente_nombre: userData.nombre || "",
+              cliente_email: userData.email || user.email || "",
+              cliente_telefono: userData.telefono || "",
+            }));
+          }
+        }
+      } catch (error) {
+        console.error("Error cargando información del usuario:", error);
+      }
+    };
+
+    loadUserInfo();
+  }, []);
+
   // Cargar disponibilidad cuando cambia la fecha
   const checkAvailability = async (fecha: string) => {
     if (!fecha) {
