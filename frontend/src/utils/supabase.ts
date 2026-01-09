@@ -7,6 +7,15 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error("Missing Supabase environment variables");
 }
 
+// Obtener la URL base del sitio (funciona en local y producción)
+const getRedirectUrl = () => {
+  if (typeof window !== 'undefined') {
+    return `${window.location.origin}/auth/callback`;
+  }
+  // Fallback para SSR
+  return `${import.meta.env.SITE || 'http://localhost:4321'}/auth/callback`;
+};
+
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
@@ -14,6 +23,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     detectSessionInUrl: true,
     storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     storageKey: 'icarsolutions-auth',
+    flowType: 'pkce',
+    redirectTo: getRedirectUrl(),
   },
 });
 

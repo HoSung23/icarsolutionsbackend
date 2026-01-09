@@ -18,7 +18,7 @@ import SparePartsInventory from "../components/SparePartsInventory";
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      window.location.href = "/admin";
+      window.location.href = "/login";
       return;
     }
 

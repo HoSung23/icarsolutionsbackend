@@ -96,7 +96,7 @@ import Settings from "../components/Settings";
     
     if (!session) {
       // No hay sesión, redirigir al login
-      window.location.href = "/admin";
+      window.location.href = "/login";
       return;
     }
 
@@ -109,7 +109,7 @@ import Settings from "../components/Settings";
 
     if (error || !userData) {
       console.error("Error obteniendo datos del usuario:", error);
-      window.location.href = "/admin";
+      window.location.href = "/login";
       return;
     }
 
@@ -160,7 +160,7 @@ import Settings from "../components/Settings";
       return;
     }
     
-    window.location.href = "/admin";
+    window.location.href = "/login";
   });
 
   // Ejecutar verificación al cargar

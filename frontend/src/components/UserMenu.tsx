@@ -31,7 +31,7 @@ export default function UserMenu() {
   if (!isAuthenticated || !user) {
     return (
       <a
-        href="/admin"
+        href="/login"
         className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold transition"
       >
         Iniciar Sesión

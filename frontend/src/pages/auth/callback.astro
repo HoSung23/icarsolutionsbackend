@@ -49,18 +49,33 @@ export const prerender = false;
 
     async function handleAuthCallback() {
       try {
-        // Obtener el usuario autenticado
-        const { data: { user }, error } = await supabase.auth.getUser();
+        // Verificar si hay errores en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
         
         if (error) {
-          console.error('Error obteniendo usuario:', error);
-          window.location.href = '/?error=auth_failed';
+          console.error('Error en autenticación:', error, errorDescription);
+          // Redirigir al login con mensaje de error
+          if (error === 'access_denied' || error.includes('otp_expired')) {
+            alert('El enlace de confirmación ha expirado o es inválido. Por favor, solicita un nuevo enlace.');
+          }
+          window.location.href = '/dashboard';
+          return;
+        }
+
+        // Obtener el usuario autenticado
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        
+        if (userError) {
+          console.error('Error obteniendo usuario:', userError);
+          window.location.href = '/dashboard?error=auth_failed';
           return;
         }
 
         if (!user) {
           console.error('No hay usuario autenticado');
-          window.location.href = '/?error=no_user';
+          window.location.href = '/dashboard?error=no_user';
           return;
         }
 
