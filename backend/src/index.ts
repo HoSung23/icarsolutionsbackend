@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 
 import vehicleRoutes from "./routes/vehicles.js";
 import quoteRoutes from "./routes/quotes.js";
+import iaaiRoutes from "./routes/iaai.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import logger from "./config/logger.js";
 
@@ -27,6 +28,7 @@ app.use(limiter);
 // Routes
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/cotizaciones", quoteRoutes);
+app.use("/api/importaciones", iaaiRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
