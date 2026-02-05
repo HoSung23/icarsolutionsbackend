@@ -27,6 +27,8 @@ app.use(cors({
     "http://localhost:4321",
     "http://localhost:4322",
     "https://i-carsolutions.com",
+    "https://icarsolutions.com",
+    /\.railway\.app$/, // Allow all railway subdomains
     process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : ""
   ].filter(Boolean),
   credentials: true
@@ -41,7 +43,7 @@ app.use("/api/importaciones", iaaiRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
-  res.json({ 
+  res.json({
     status: "ok",
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV
@@ -51,13 +53,10 @@ app.get("/api/health", (req, res) => {
 // Error handler
 app.use(errorHandler);
 
-// Para desarrollo local
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    logger.info(`Server running on port ${PORT}`);
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-  });
-}
+// Iniciar servidor
+app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
 
 export default app;
