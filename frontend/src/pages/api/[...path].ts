@@ -9,12 +9,20 @@ const BACKEND_URL = process.env.BACKEND_URL ||
   import.meta.env.PUBLIC_BACKEND_URL ||
   'http://localhost:3000';
 
+const getFullUrl = (baseUrl: string) => {
+  if (!baseUrl.startsWith('http://') && !baseUrl.startsWith('https://')) {
+    return `https://${baseUrl}`;
+  }
+  return baseUrl;
+};
+
 export const ALL: APIRoute = async ({ request, params }) => {
   const path = params.path;
 
   try {
     const url = new URL(request.url);
-    const targetUrl = `${BACKEND_URL.replace(/\/$/, '')}/api/${path}${url.search}`;
+    const sanitizedBaseUrl = getFullUrl(BACKEND_URL).replace(/\/$/, '');
+    const targetUrl = `${sanitizedBaseUrl}/api/${path}${url.search}`;
 
     console.log(`[API Proxy] ${request.method} ${targetUrl}`);
 
